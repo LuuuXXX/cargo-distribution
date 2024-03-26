@@ -1,7 +1,48 @@
 mod commands;
 
-use hello_world::util;
+use hello_world::util::*;
 
-fn main() {
-    println!("Hello, world!");
+pub fn main() {
+    let args = cli().get_matches();
+    
+    let (cmd, subcommand_args) = match args.subcommand() {
+        Some((cmd, args)) => (cmd, args),
+        None => todo!(),
+    };
+    let exec = commands::builtin_exec(cmd);
+    match exec {
+        Some(runner) => runner(subcommand_args),
+        None => todo!(),
+    }
+}
+
+pub fn cli() -> Command { 
+    // The Usage example
+    let usage = "cargo-dist [OPTION] [COMMAND]";
+    // The main program client command.
+    Command::new("cargo-dist")
+        // Subcommands all count their args' display order independently (from 0),
+        // which makes their args interspersed with global args. This puts global args last.
+        .next_display_order(1000)
+        .allow_external_subcommands(true)
+        // Provide a custom help subcommand for calling into man pages
+        .disable_help_subcommand(true)
+        .override_usage(usage)
+        .help_template(
+            "\
+Rust's package manager
+
+Usage: {usage}
+
+Options:
+{options}
+
+Some common package command are (see all command with --list):
+    install      Insatll Rust componenet added in `distribution.toml`.
+    package      Build locally and package as component as rustup can identify.
+
+See 'cargo-dist help <command>' for more information. \n"
+        )
+        .arg(flag("version", "Print version info and exit").short('V'))
+        .subcommands(commands::builtin())
 }

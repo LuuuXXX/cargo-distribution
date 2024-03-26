@@ -6,5 +6,6 @@ edition = "2021"
 [dependencies]
 clap = "4.2.0"
 
-[bin]
-name = "cargo-distribution"
+[[bin]]
+name = "cargo-dist"
+path = "src/bin/main.rs"

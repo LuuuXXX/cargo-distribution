@@ -1,6 +1,17 @@
 use std::fmt::Error;
 use std::process::{Command, Stdio};
 
+pub struct RustOffice(String);
+
+pub struct Tools {
+    tools: Vec<Tool>
+}
+
+pub struct Tool {
+    git_url: String,
+    branch: Option<String>
+}
+
 struct Curl {
     cmd: Command,
     host: String,

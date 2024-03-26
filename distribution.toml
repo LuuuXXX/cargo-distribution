@@ -1,7 +1,7 @@
 [rust]
 version = ""
 
-[toolchain]
+[tools]
 # Configuration for component.
 # Git location and branch are required to download it.
 # Format: https://XXX
